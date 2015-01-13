@@ -16,19 +16,8 @@ function inspectedIs(expected)
 	local b, item = turtle.inspect()
 	if b then
 		local name = mcname(expected)
-		print("inspected is ["..item.name.."], expecting ["..name.."]")
+		--print("inspected is ["..item.name.."], expecting ["..name.."]")
 		return item.name == name
 	end
 	return false
-end
-function itemIs(index,expected)
-	-- check whether the item in the inventory at slot index matches expected
-	item = turtle.getItemDetail(index)
-	if(item==nil) then
-		print "no item there"
-		return false
-	end
-	local name = mcname(expected)
-	print("inventory is ["..item.name.."], expecting ["..name.."]")
-	return item.name == name
 end

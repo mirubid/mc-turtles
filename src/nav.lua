@@ -1,4 +1,8 @@
 -- navigation
+if(nav) then
+	print("nav already loaded")
+	return true
+end
 local t= turtle
 print ("initializing turtle with nav features")
 
@@ -56,13 +60,19 @@ ud.go=function(dir)
 	end
 end
 t.forward = function () fb.go(F)	end
+t.f=t.forward
 t.back = function() fb.go(B) end
+t.b=t.back
 
 t.turnRight = function() turn.go(R) end
+t.r=t.turnRight
 t.turnLeft = function() turn.go(L) end
+t.l=t.turnLeft
 
 t.up = function() ud.go(U) end
+t.u = t.up
 t.down = function() ud.go(D) end
+t.d = t.down
 
 t.getBearing = function() return bearing end
 t.getPos = function() return pos end
