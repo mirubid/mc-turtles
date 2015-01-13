@@ -1,11 +1,12 @@
 -- utilities for other scripts
 
-names={}
-names.dirt="dirt"
-names.log="log"
-names.sapling="sapling"
-names.bonemeal="dye"
-
+names={
+  dirt="dirt",
+  log="log",
+  sapling="sapling",
+  bonemeal="dye",
+  leaves="leaves"
+}
 function mcname(name) 
 	return "minecraft:"..name 
 end

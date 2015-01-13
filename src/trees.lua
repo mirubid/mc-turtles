@@ -92,6 +92,7 @@ while true do
 		print("something there ("..item.name.."), waiting for it to be cleared")
 		while turtle.detect() do 
 			print "waiting for the tree (or whatever) to be cleared"
+			print(string.format('trees planted: %d, bonemeal used:%d',treesPlanted,bonemealUsed))
 			os.sleep(15) 
 		end
 	end
