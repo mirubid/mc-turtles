@@ -6,7 +6,7 @@ end
 local t= turtle
 print ("initializing turtle with nav features")
 
-if(t.__navigator) then return true end
+
 
 local turn={}
 local L=-1 -- left
@@ -14,8 +14,8 @@ local R=1 -- right
 turn[L]=t.turnLeft
 turn[R]=t.turnRight
 local fb={}
-local F = 1
-local B = -1
+local F = -1
+local B = 1
 fb[F]=t.forward
 fb[B]=t.back	
 
@@ -87,5 +87,56 @@ function zero()
 	pos = vector.new(0,0,0)
 	print ("position and bearing reset to zero")
 end
-t.__navigator = {}
-
+function moveBearing(rotation)
+	-- rotation: difference between target bearing and current bearing
+	if(rotation==0) then		
+		return fb.go(F)
+	end
+	local abs_r = math.abs(rotation)
+	if(abs_r==2)then
+		return fb.go(B)
+	end
+	if(rotation==3 or rotation==-1) then
+		turn.go(L)
+	else
+		turn.go(R)
+	end
+	return fb.go(F)
+end
+function vectorToBearing(v)
+	-- convert a direction vector to a bearing
+	return math.abs(v.z) * (1+v.z) + math.abs(v.x) * (2 + v.x)
+end
+function bearingToVector(bearing)
+	if(bearing<-3) then error("bearing must be between -3 and 3 inclusive") end
+	-- convert a bearing to a direction vector
+	bearing = (4+bearing) % 4
+	local x,z = ( bearing%2), (bearing%2)
+	local mult =  1
+	if(bearing < 2) then
+		mult=-1
+	end
+	return vector.new( (bearing%2), 0, 1-bearing%2 ) * mult
+end
+function moveTo(posV)
+	-- move to cell at position posV
+	local dirV = posV - pos
+	if( dirV:length() > 1) then
+		print("can't move from "..pos:toString().." to "..posV:toString()..". can only move to adjacent cells.")
+		return false
+	end
+	if(dirV:length()==0) then
+		return true -- we're already there
+	end
+	if(0~=dirV.y) then
+		-- vertical travel
+		ud.go(dirV.y)
+		return true
+	end
+	
+	local targetBearing =  vectorToBearing(dirV)
+	
+	local rotation = targetBearing - bearing
+	
+	return moveBearing(rotation)
+end

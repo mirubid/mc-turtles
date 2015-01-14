@@ -22,3 +22,12 @@ function inspectedIs(expected)
 	end
 	return false
 end
+function inspectedIsAny(index,items)
+	if(nil==items) then return false end
+	for i,_ in pairs(items) do
+		if(inspectedIs(index,i)) then
+			return true
+		end
+	end
+	return false
+end
