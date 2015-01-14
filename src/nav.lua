@@ -28,6 +28,11 @@ ud[D] = t.down
 local bearing=0 -- bearing relative to start bearing, 0=start bearing
 local pos = vector.new(0,0,0)
 
+vectors={
+	up=vector.new(0,1,0),
+	down = vector.new(0,-1,0)
+}
+
 turn.go=function(dir)
 	if(dir ~= 1 and dir ~=-1) then
 		print ("invalid direction given: "..dir)
@@ -118,12 +123,36 @@ function bearingToVector(bearing)
 	end
 	return vector.new( (bearing%2), 0, 1-bearing%2 ) * mult
 end
+function face(posV)
+	-- face the cell at the specified position
+	local dirV = posV - pos
+	if( dirV:length() > 1) then	
+		return false, "non-adjacent movement"
+	end
+	if(dirV:length()==0) then
+		return false, "meaningless facement" -- we're already there
+	end
+	if(0~=dirV.y) then
+		local dir="Up"
+		if(dirV.y<0) then dir="Down" end
+		return false, "vertical", dir
+	end
+	local targetBearing=vectorToBearing(dirV);
+	rotation = (targetBearing - bearing + 4) % 4
+	if(rotation==3)then
+		return turn.go(L)
+	end
+	for i = 1,rotation do 
+		if(false==turn.go(R) ) then return false end
+	end
+	return true, nil, ""
+end
 function moveTo(posV)
 	-- move to cell at position posV
 	local dirV = posV - pos
 	if( dirV:length() > 1) then
 		print("can't move from "..pos:toString().." to "..posV:toString()..". can only move to adjacent cells.")
-		return false
+		return false, "non-adjacent movement"
 	end
 	if(dirV:length()==0) then
 		return true -- we're already there

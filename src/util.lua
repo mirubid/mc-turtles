@@ -12,9 +12,11 @@ function mcname(name)
 end
 names.mc=mcname
 
-function inspectedIs(expected)
+function inspectedIs(expected,dir)
 	-- compare the item in front of the turtle to expected
-	local b, item = turtle.inspect()
+	if(dir==nil) then dir="" end
+	local b, item = turtle["inspect"..dir]()
+	
 	if b then
 		local name = mcname(expected)
 		--print("inspected is ["..item.name.."], expecting ["..name.."]")
@@ -22,10 +24,10 @@ function inspectedIs(expected)
 	end
 	return false
 end
-function inspectedIsAny(index,items)
+function inspectedIsAny(items,dir)
 	if(nil==items) then return false end
-	for i,_ in pairs(items) do
-		if(inspectedIs(index,i)) then
+	for i,expected in pairs(items) do
+		if(inspectedIs(expected,dir)) then
 			return true
 		end
 	end
