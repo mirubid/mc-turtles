@@ -90,11 +90,18 @@ while true do
 	else
 		-- something blocking, probably a tree. later, we'll add code for chopping the tree
 		print("something there ("..item.name.."), waiting for it to be cleared")
-		while turtle.detect() do 
-			print "waiting for the tree (or whatever) to be cleared"
+		while turtle.detect() and not util.inspectedIs(names.log) do 
+			print "waiting for something to be cleared"
 			print(string.format('trees planted: %d, bonemeal used:%d',treesPlanted,bonemealUsed))
 			os.sleep(15) 
 		end
+		print("starting the vein miner")
+		local vm = veinminer.new({names.log})
+		vm.begin()
+		vm=nil
+		nav.faceBearing(0)
+		print("sleeping to let the leaves clear")
+		os.sleep(120)
 	end
 end
 

@@ -37,28 +37,37 @@ turn.go=function(dir)
 	if(dir ~= 1 and dir ~=-1) then
 		print ("invalid direction given: "..dir)
 	end
-	--print ("turning "..dir)
+	--term.write ("turning "..dir..";")
 	if( turn[dir]() ) then
+		--term.write(bearing)
 		bearing = (bearing + dir) % 4
+		--print(" -> "..bearing)
+		return true
+	else
+		return false
 	end
 end
 fb.go=function(dir)
 	if(dir ~= F and dir ~=B) then
 		print ("invalid direction given: "..dir)
 	end
-	print("horizontal move "..dir)
+	--term.write("fb.go("..dir..") ")
 	if(fb[dir]())then
 			-- `north` is in the direction of diminishing Z, east is diminishing X (Y is vertical)
 		--print ("updating position. bearing: "..bearing)
-		local v = vector.new(bearing%2, 0, 1-(bearing%2) ) * dir
+		local v = bearingToVector(bearing) * -dir
+		--term.write(pos:tostring().." -> ")
 		pos = pos + v
+		--term.write(pos:tostring().." (dir:".. v:tostring()..")")
+		return true
 	end
+	return false
 end
 ud.go=function(dir)
 	if(dir ~= U and dir ~=D) then
 		print ("invalid direction given: "..dir)
 	end
-	print("vertical move "..dir)
+	--print("vertical move "..dir)
 	if(ud[dir]())then
 		--print ("updating position")
 		pos= pos + vector.new(0, dir*1, 0)
@@ -94,18 +103,24 @@ function zero()
 end
 function moveBearing(rotation)
 	-- rotation: difference between target bearing and current bearing
+	--print("moveInBearing "..rotation);
 	if(rotation==0) then		
+		--print("F")
 		return fb.go(F)
 	end
 	local abs_r = math.abs(rotation)
 	if(abs_r==2)then
+		--print("B")
 		return fb.go(B)
 	end
 	if(rotation==3 or rotation==-1) then
+		--term.write("L")
 		turn.go(L)
 	else
+		--term.write("R")
 		turn.go(R)
 	end
+	--print("F")
 	return fb.go(F)
 end
 function vectorToBearing(v)
@@ -127,10 +142,10 @@ function face(posV)
 	-- face the cell at the specified position
 	local dirV = posV - pos
 	if( dirV:length() > 1) then	
-		return false, "non-adjacent movement"
+		return false, "non-adjacent movement",""
 	end
 	if(dirV:length()==0) then
-		return false, "meaningless facement" -- we're already there
+		return false, "meaningless facement","" -- we're already there
 	end
 	if(0~=dirV.y) then
 		local dir="Up"
@@ -138,20 +153,29 @@ function face(posV)
 		return false, "vertical", dir
 	end
 	local targetBearing=vectorToBearing(dirV);
-	rotation = (targetBearing - bearing + 4) % 4
+	if ( faceBearing(targetBearing) ) then
+		return true,nil,""
+	end
+	return false,"?",""
+end
+function faceBearing(targetBearing)
+	local rotation = (targetBearing - bearing + 4) % 4
 	if(rotation==3)then
 		return turn.go(L)
 	end
+	local i
 	for i = 1,rotation do 
 		if(false==turn.go(R) ) then return false end
 	end
-	return true, nil, ""
+	return true
 end
 function moveTo(posV)
 	-- move to cell at position posV
 	local dirV = posV - pos
+	--print("moveTo:"..posV:tostring().." --> "..pos:tostring().." ("..dirV:tostring()..")")
+	
 	if( dirV:length() > 1) then
-		print("can't move from "..pos:toString().." to "..posV:toString()..". can only move to adjacent cells.")
+		--print("can't move from "..pos:tostring().." to "..posV:tostring()..". (non-adjacent)")
 		return false, "non-adjacent movement"
 	end
 	if(dirV:length()==0) then

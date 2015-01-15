@@ -26,6 +26,7 @@ function inspectedIs(expected,dir)
 end
 function inspectedIsAny(items,dir)
 	if(nil==items) then return false end
+	local i, expected
 	for i,expected in pairs(items) do
 		if(inspectedIs(expected,dir)) then
 			return true
