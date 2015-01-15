@@ -80,7 +80,7 @@ function new(itemsToMine)
 		if(cell.visited) then return end
 		local start_pos = nav.getPos()
 		
-		print("visit: "..start_pos:tostring().."-->"..cell.pos:tostring())
+		--print("visit: "..start_pos:tostring().."-->"..cell.pos:tostring())
 		assert(nav.moveTo(cell.pos))
 		local current_pos = nav.getPos()
 		assert(current_pos:tostring()==cell.pos:tostring(),"expected "..current_pos:tostring().."=="..cell.pos:tostring())
@@ -90,15 +90,15 @@ function new(itemsToMine)
 		local next_cells = cellsToVisit(cell,dig)
 		
 		local next_cell, _
-		term.write(" ->")
-		for _,next_cell in pairs(next_cells) do term.write(next_cell.pos:tostring().."|") end
-		print("")
+		--term.write(" ->")
+		--for _,next_cell in pairs(next_cells) do term.write(next_cell.pos:tostring().."|") end
+		--print("")
 		for _,next_cell in pairs(next_cells) do
 			visit(next_cell)
 		end
 		--cellStack:pop_right(cell)
 		-- return to previous location
-		print("leaving cell "..cell.pos:tostring())
+		--print("leaving cell "..cell.pos:tostring())
 		nav.moveTo(start_pos)
 	end
 	local function begin()
@@ -112,6 +112,7 @@ function new(itemsToMine)
 		initial.cell = getCell(initial.pos)
 		count=0
 		visit(initial.cell)
+		nav.faceBearing(initial.bearing)
 		print("done. cells visited: "..count)
 	end
 	return {begin=begin,report=report}
