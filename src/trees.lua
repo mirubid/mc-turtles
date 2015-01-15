@@ -18,14 +18,15 @@ function mealIt(item)
 			print( "ran out of bonemeal at "..bonemealIndex)
 			return false, count
 		end
+		
 		turtle.place()
 		count = count + 1
+		os.sleep(4)
 		-- check whether the tree grew
 		if( util.inspectedIs(names.log) ) then
 			print( "a tree grew after "..count.." attempts")
 			return true, count
 		end
-		os.sleep(2)
 	end
 end
 function plantSapling()
