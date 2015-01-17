@@ -5,8 +5,13 @@ names={
   log="log",
   sapling="sapling",
   bonemeal="dye",
-  leaves="leaves"
+  leaves="leaves",
+  barrel="exnihilo:barrel",
+  stone_barrel="exnihilo:stone_barrel", -- no interaction?
+  crucible="exnihilo:crucible", -- no interaction?
+  better_barrel="JABBA:barrel",-- can only suck 64 at a time
 }
+
 function mcname(name) 
 	return "minecraft:"..name 
 end

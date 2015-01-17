@@ -1,4 +1,4 @@
-﻿local push_right = function(self, x)
+local push_right = function(self, x)
   assert(x ~= nil)
   self.tail = self.tail + 1
   self[self.tail] = x
@@ -101,7 +101,7 @@ end
 local iter_left = function(self)
   local i = self.head
   return function()
-    if i > self.tail then
+    if i < self.tail then
       i = i+1
       return self[i]
     end

@@ -1,4 +1,9 @@
 if(deque==nil) then os.loadAPI("/api/deque") end
+
+
+local directions="nsewudfblr"
+local numbers="123456789"
+--[[
 local dir_vectors={
 	"n"=vector.new(0,0,-1),
 	"s"=vector.new(0,0,1),
@@ -7,9 +12,7 @@ local dir_vectors={
 	"u"=vector.new(0,1,0),
 	"d"=vector.new(0,-1,0)
 }
-local directions="nsewudfblr"
-local numbers="123456789"
-
+]]
 local function iter_step(step)
 	local i =0
 	return function()
