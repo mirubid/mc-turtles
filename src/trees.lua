@@ -1,6 +1,7 @@
 if(nil==nav) then os.loadAPI("nav") end
 if(nil==util ) then os.loadAPI("util") end
 if(nil==inventory) then os.loadAPI("inventory") end
+if(veinminer==nil) then os.loadAPI("api/veinminer") end
 local names = util.names
 
 local bonemealIndex=5
@@ -8,7 +9,13 @@ local saplingIndex=1
 local treesChopped=0 -- the number of trees that have been chopped
 local treesPlanted=0
 local bonemealUsed=0
-
+local station_num=1
+local stations={
+	{"2n",0},
+	{"4e",0},
+	{"2s",2},
+	{"4w",2}
+}
 function mealIt(item)
 	local count=0
 	print ("applying bonemeal")
@@ -90,7 +97,7 @@ while true do
 		end
 	else
 		-- something blocking, probably a tree. later, we'll add code for chopping the tree
-		print("something there ("..item.name.."), waiting for it to be cleared")
+		--print("something there ("..item.name.."), waiting for it to be cleared")
 		while turtle.detect() and not util.inspectedIs(names.log) do 
 			print "waiting for something to be cleared"
 			print(string.format('trees planted: %d, bonemeal used:%d',treesPlanted,bonemealUsed))
@@ -100,9 +107,19 @@ while true do
 		local vm = veinminer.new({names.log})
 		vm.begin()
 		vm=nil
-		nav.faceBearing(0)
-		print("sleeping to let the leaves clear")
-		os.sleep(120)
+		
+		station_num = (station_num + 1) 
+		if(station_num>#stations) then 
+			station_num=1 
+		end
+		print ("moving to station "..station_num)
+		local station = stations[station_num]
+		route.go(station[1])
+		nav.faceBearing(station[2])
+		--nav.faceBearing(0)
+		if(station_num==1) then
+			os.sleep(30)
+		end
 	end
 end
 

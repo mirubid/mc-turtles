@@ -1,18 +1,19 @@
 if(deque==nil) then os.loadAPI("/api/deque") end
+if(nav==nil) then os.loadAPI("nav") end
 
 
 local directions="nsewudfblr"
 local numbers="123456789"
---[[
+
 local dir_vectors={
-	"n"=vector.new(0,0,-1),
-	"s"=vector.new(0,0,1),
-	"e"=vector.new(-1,0,0),
-	"w"=vector.new(1,0,0),
-	"u"=vector.new(0,1,0),
-	"d"=vector.new(0,-1,0)
+	n=vector.new(0,0,-1),
+	s=vector.new(0,0,1),
+	e=vector.new(-1,0,0),
+	w=vector.new(1,0,0),
+	u=vector.new(0,1,0),
+	d=vector.new(0,-1,0)
 }
-]]
+
 local function iter_step(step)
 	local i =0
 	return function()
@@ -69,4 +70,19 @@ end
 function traverse(path,f)
 	local q = parse(path)
 	iterate(q,f)
+end
+local function move(d)
+	if(d=="l") then
+		return turtle.turnLeft()
+	end
+	if(d=="r") then
+		return turtle.turnRight()
+	end
+	--print("Move "..d)
+	return nav.moveDir(dir_vectors[d])
+	
+	
+end
+function go(path)
+	traverse(path,move)
 end

@@ -66,12 +66,15 @@ end
 ud.go=function(dir)
 	if(dir ~= U and dir ~=D) then
 		print ("invalid direction given: "..dir)
+		return false, "invalid direction"
 	end
 	--print("vertical move "..dir)
 	if(ud[dir]())then
 		--print ("updating position")
 		pos= pos + vector.new(0, dir*1, 0)
+		return true
 	end
+	return false
 end
 t.forward = function () fb.go(F)	end
 t.f=t.forward
@@ -158,6 +161,7 @@ function face(posV)
 	end
 	return false,"?",""
 end
+
 function faceBearing(targetBearing)
 	local rotation = (targetBearing - bearing + 4) % 4
 	if(rotation==3)then
@@ -169,11 +173,14 @@ function faceBearing(targetBearing)
 	end
 	return true
 end
-function moveTo(posV)
-	-- move to cell at position posV
-	local dirV = posV - pos
-	--print("moveTo:"..posV:tostring().." --> "..pos:tostring().." ("..dirV:tostring()..")")
-	
+
+
+function moveDir(dirV)
+	-- move in direction dirV
+	--print("move "..dirV:tostring())
+	if(dirV==nil) then
+		return false
+	end
 	if( dirV:length() > 1) then
 		--print("can't move from "..pos:tostring().." to "..posV:tostring()..". (non-adjacent)")
 		return false, "non-adjacent movement"
@@ -183,8 +190,7 @@ function moveTo(posV)
 	end
 	if(0~=dirV.y) then
 		-- vertical travel
-		ud.go(dirV.y)
-		return true
+		return ud.go(dirV.y)
 	end
 	
 	local targetBearing =  vectorToBearing(dirV)
@@ -192,4 +198,10 @@ function moveTo(posV)
 	local rotation = targetBearing - bearing
 	
 	return moveBearing(rotation)
+end
+
+function moveTo(posV)
+	-- move to cell at position posV
+	local dirV = posV - pos
+	return moveDir(dirV)
 end
