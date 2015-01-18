@@ -1,35 +1,39 @@
 -- pave
-if(nil==deque) then os.loadAPI("deque") end
+if(nil==deque) then os.loadAPI("api/deque") end
 local targs = {...}
-local dimensions = deque.new()
-local i,v,shape,x,y
+
+local x,y
 local start_pos=nav.getPos()
 local start_bearing=nav.getBearing()
+local going=false
 
-
-print ("starting pave")
-if(#targs == 0) then
-	shape="rectangle"
-	dimensions:push_right(8)
-	dimensions:push_right(8)
-end
-for i,v in pairs(targs) do
-	local n = tonumber(v)
-	if(n) then 
-		dimensions:push_right(n) 	
-	else
-		shape = v
+function parseArges(targs)
+	local dimensions = deque.new()
+	local shape
+	if(#targs == 0) then
+		shape="rectangle"
+		dimensions:push_right(8)
+		dimensions:push_right(8)
 	end
+	local i,v
+	for i,v in pairs(targs) do
+		local n = tonumber(v)
+		if(n) then 
+			dimensions:push_right(n) 	
+		else
+			shape = v
+		end
+	end
+	if(not shape) then
+		shape="rectangle"
+	end
+	return shape, dimensions
 end
-if(not shape) then
-	shape="rectangle"
-end
-
 print ( "paving a "..shape)
-function pave_down()
+local function pave_down()
 	turtle.placeDown()
 end
-function rect_iter(dimensions,f)
+local function rect_iter(dimensions,f)
 	local z,x= dimensions[1], dimensions[2]
 	local x_bearing = (start_bearing + 1) % 4
 	if ( not z or not x) then
@@ -92,7 +96,7 @@ function rect_iter(dimensions,f)
 	end
 end
 
-function wall_iter(dimensions,f)
+local function wall_iter(dimensions,f)
 	return nil
 end
 local function paver()
@@ -119,8 +123,23 @@ local function paver()
 		--os.sleep(1) 
 	end
 end
-local shapes={
+shapes={
 	rectangle=rect_iter
 }
-local _
-for _ in shapes[shape]( dimensions, paver() ) do print("") end
+function go(shape,dimensions,f)
+	if(goig) then
+		return false, "paver already going"
+	end
+	start_pos=nav.getPos()
+	start_bearing=nav.getBearing()
+	going=true
+	local _
+	for _ in shapes[shape]( dimensions, f ) do print("") end
+	going = false
+end
+function pave(shape,dimensions)
+	go( shape,dimensions,paver() )
+end
+function clear(shape,dimensions)
+	go(shape, dimensions, function() turtle.digDown() end ) 
+end

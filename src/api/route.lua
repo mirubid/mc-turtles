@@ -78,6 +78,12 @@ local function move(d)
 	if(d=="r") then
 		return turtle.turnRight()
 	end
+	if(d=="f") then
+		return turtle.forward()
+	end
+	if(d=="b") then
+		return turtle.back()
+	end
 	--print("Move "..d)
 	return nav.moveDir(dir_vectors[d])
 	
