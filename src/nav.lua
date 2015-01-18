@@ -181,6 +181,10 @@ function moveDir(dirV)
 	if(dirV==nil) then
 		return false
 	end
+	if(type(dirV)=="number")then
+		return moveDir( bearingToVector(dirV) )
+	end
+	
 	if( dirV:length() > 1) then
 		--print("can't move from "..pos:tostring().." to "..posV:tostring()..". (non-adjacent)")
 		return false, "non-adjacent movement"
