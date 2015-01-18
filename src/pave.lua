@@ -26,7 +26,9 @@ end
 
 
 print ( "paving a "..shape)
-
+function pave_down()
+	turtle.placeDown()
+end
 function rect_iter(dimensions,f)
 	local z,x= dimensions[0], dimensions[1]
 	local x_bearing = 1
