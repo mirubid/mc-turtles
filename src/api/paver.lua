@@ -1,13 +1,12 @@
 -- pave
 if(nil==deque) then os.loadAPI("api/deque") end
-local targs = {...}
 
 local x,y
 local start_pos=nav.getPos()
 local start_bearing=nav.getBearing()
 local going=false
 
-function parseArges(targs)
+function parseArgs(targs)
 	local dimensions = deque.new()
 	local shape
 	if(#targs == 0) then
@@ -29,7 +28,7 @@ function parseArges(targs)
 	end
 	return shape, dimensions
 end
-print ( "paving a "..shape)
+
 local function pave_down()
 	turtle.placeDown()
 end
@@ -134,7 +133,9 @@ function go(shape,dimensions,f)
 	start_bearing=nav.getBearing()
 	going=true
 	local _
+	print ( "paving a "..shape)
 	for _ in shapes[shape]( dimensions, f ) do print("") end
+	print("done")
 	going = false
 end
 function pave(shape,dimensions)
