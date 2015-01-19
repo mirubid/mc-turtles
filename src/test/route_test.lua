@@ -16,3 +16,5 @@ test_step1("u",1,"u")
 test_step1("d",1,"d")
 test_step1("ss",2,"s")
 test_step1("2s",2,"s")
+
+test_step1("10n",10,"n")

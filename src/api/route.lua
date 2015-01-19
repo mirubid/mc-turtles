@@ -3,7 +3,7 @@ if(nav==nil) then os.loadAPI("nav") end
 
 
 local directions="nsewudfblr"
-local numbers="123456789"
+local numbers="1234567890"
 
 local dir_vectors={
 	n=vector.new(0,0,-1),
