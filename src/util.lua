@@ -11,7 +11,7 @@ names={
   crucible="exnihilo:crucible", -- no interaction?
   better_barrel="JABBA:barrel",-- can only suck 64 at a time
 }
-
+-- "minecraft:stone_brick_stairs"
 function mcname(name) 
 	return "minecraft:"..name 
 end

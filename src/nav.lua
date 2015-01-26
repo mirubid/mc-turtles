@@ -27,6 +27,8 @@ ud[D] = t.down
 
 local bearing=0 -- bearing relative to start bearing, 0=start bearing
 local pos = vector.new(0,0,0)
+local real_bearing=0
+local gps_offset=vector.new(0,0,0)
 
 vectors={
 	up=vector.new(0,1,0),
@@ -99,11 +101,21 @@ end
 function getBearing()
 	return bearing
 end
+
+
 function zero()
 	bearing=0
 	pos = vector.new(0,0,0)
 	print ("position and bearing reset to zero")
 end
+
+function vectorToBearing(v)
+	-- convert a direction vector to a bearing
+	return math.abs(v.z) * (1+v.z) + math.abs(v.x) * (2 + v.x)
+end
+
+
+
 function moveBearing(rotation)
 	-- rotation: difference between target bearing and current bearing
 	--print("moveInBearing "..rotation);
@@ -126,10 +138,7 @@ function moveBearing(rotation)
 	--print("F")
 	return fb.go(F)
 end
-function vectorToBearing(v)
-	-- convert a direction vector to a bearing
-	return math.abs(v.z) * (1+v.z) + math.abs(v.x) * (2 + v.x)
-end
+
 function bearingToVector(bearing)
 	if(bearing<-3) then error("bearing must be between -3 and 3 inclusive") end
 	-- convert a bearing to a direction vector
@@ -208,4 +217,41 @@ function moveTo(posV)
 	-- move to cell at position posV
 	local dirV = posV - pos
 	return moveDir(dirV)
+end
+
+function calibrate()
+	local x,y,z = gps.locate()
+	if(nil==x) then
+		return nil, "gps not available"
+	end
+	local gps1=vector.new(x,y,z)
+	local function findSpace()
+		local i
+		for i=0,3 do
+			if ( not turtle.detect()) then
+				return true, i
+			end
+			turtle.turnRight()
+		end
+		return false
+	end
+	
+	local space_found,rotation = findSpace()
+	
+	turtle.forward()
+	
+	local x2,y2,z2 = gps.locate()
+	if(nil==x2) then
+		turtle.back()
+		return nil,"gps not available"
+	end
+	gps2=vector.new(x2,y2,z2)
+	
+	bearing = vectorToBearing(gps2-gps1)
+	pos = gps2
+	-- now go back where we started
+	
+	turtle.back()
+	faceBearing(-rotation)
+	
 end
