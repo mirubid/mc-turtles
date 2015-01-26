@@ -7,7 +7,10 @@ param(
 	$num
 )
 
-	ls -File src | %{cp "src\$_" "$destfolder\$num\$($_.BaseName)"}
+	ls -File src | %{
+	write-host "src\$_" "$destfolder\$num\$($_.BaseName)"
+	cp "src\$_" "$destfolder\$num\$($_.BaseName)"
+	}
 	ls -File src\api | %{
 	write-host "$($_.FullName)" "$destfolder\$num\api\$($_.BaseName)"
 	cp "$($_.FullName)" "$destfolder\$num\api\$($_.BaseName)"
