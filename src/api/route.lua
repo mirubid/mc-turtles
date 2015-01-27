@@ -92,3 +92,39 @@ end
 function go(path)
 	traverse(path,move)
 end
+
+function goTo(pos)
+	if (not nav.isCalibrated()) then
+		return false, "not calibrated"
+	end
+	local ttl=100
+	local deadend=false
+	local thereYet=false
+	local dirs = {vector.new(0,1,0),vector.new(1,0,0),vector.new(0,0,1)}
+	
+	local function move()
+		ttl=ttl-1
+		local delta = pos - nav.getPos()
+		--term.write("delta: "..delta:tostring())
+		local _
+		if(delta:length()==0) then
+			thereYet=true
+			return
+		end
+		for _,dir in pairs(dirs) do
+			local movement = vector.new( dir.x * delta.x, dir.y * delta.y, dir.z*delta.z ):normalize()
+			term.write(_..movement:tostring().." ")
+			if ( movement.x ~=nil and nav.moveDir(movement) ) then				
+				--print ("moved "..movement:tostring().. ":"..nav.vectorToBearing(movement))
+				return
+			end
+		end
+		deadend=true
+	end
+	
+	while(not thereYet and not deadend and ttl > 0) do
+		move()
+	end
+
+	return thereYet
+end

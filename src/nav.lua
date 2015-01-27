@@ -27,8 +27,7 @@ ud[D] = t.down
 
 local bearing=0 -- bearing relative to start bearing, 0=start bearing
 local pos = vector.new(0,0,0)
-local real_bearing=0
-local gps_offset=vector.new(0,0,0)
+local calibrated=false
 
 vectors={
 	up=vector.new(0,1,0),
@@ -150,6 +149,7 @@ function bearingToVector(bearing)
 	end
 	return vector.new( (bearing%2), 0, 1-bearing%2 ) * mult
 end
+
 function face(posV)
 	-- face the cell at the specified position
 	local dirV = posV - pos
@@ -249,9 +249,14 @@ function calibrate()
 	
 	bearing = vectorToBearing(gps2-gps1)
 	pos = gps2
+	calibrated=true
 	-- now go back where we started
 	
 	turtle.back()
 	faceBearing(-rotation)
 	
+end
+
+function isCalibrated()
+	return calibrated
 end
