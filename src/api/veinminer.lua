@@ -41,7 +41,7 @@ function new(itemsToMine)
 			return false, reason
 		end
 		
-		if (util.inspectedIsAny(itemsToMine,dir)) then
+		if (util.inspectedMatchesAny(itemsToMine,dir)) then
 			return turtle["dig"..dir]()
 		else
 			return false, "nothing there"
