@@ -83,7 +83,7 @@ while true do
 		local status, count = mealIt()
 		if( not status) then
 			-- we run out of bonemeal
-			transferBonemeal()
+			inventory.transferExtras(bonemealIndex,names.bonemeal)
 		else
 			bonemealUsed = bonemealUsed + count
 		end
