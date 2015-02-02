@@ -98,8 +98,20 @@ end
 local function wall_iter(dimensions,f)
 	return nil
 end
-local function paver()
+local function paver(dir,interval)
 	local slot=1
+	local place = "placeDown"
+	if (dir=="u") then place="placeUp" end
+	
+	function checkInterval()
+		if(interval==nil) then return true end
+		local pos = nav.getPos()
+		if ( (nav.x + nav.z) % interval == 0 ) then
+			return true
+		end
+		return false
+	end
+	
 	function selectItem()
 		while (turtle.getItemCount(slot)==0 and slot < 17) do
 			slot=slot+1
@@ -113,7 +125,9 @@ local function paver()
 	return function() 
 		if(selectItem()) then
 			turtle.select(slot)
-			turtle.placeDown()
+			if(checkInterval() ) then
+				turtle[place]()
+			end
 			return true
 		else
 			return false
@@ -122,11 +136,12 @@ local function paver()
 		--os.sleep(1) 
 	end
 end
+
 shapes={
 	rectangle=rect_iter
 }
 function go(shape,dimensions,f)
-	if(goig) then
+	if(going) then
 		return false, "paver already going"
 	end
 	start_pos=nav.getPos()
@@ -139,7 +154,10 @@ function go(shape,dimensions,f)
 	going = false
 end
 function pave(shape,dimensions)
-	go( shape,dimensions,paver() )
+	go( shape,dimensions,paver("d") )
+end
+function ceiling(shape,dimensions,interval)
+	go( shape,dimensions,paver("u", interval) )
 end
 function clear(shape,dimensions)
 	go(shape, dimensions, function() turtle.digDown() end ) 
