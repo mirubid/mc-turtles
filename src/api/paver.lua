@@ -146,6 +146,11 @@ function go(shape,dimensions,f)
 	end
 	start_pos=nav.getPos()
 	start_bearing=nav.getBearing()
+	local fl=turtle.getFuelLevel()
+	local fr=dimensions[1] * dimensions[2] -- fuel required
+	if (fr>fl) then
+		return false, "not enough fuel"
+	end
 	going=true
 	local _
 	print ( "paving a "..shape)
