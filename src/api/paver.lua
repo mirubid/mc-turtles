@@ -96,12 +96,86 @@ local function rect_iter(dimensions,f)
 end
 
 local function wall_iter(dimensions,f)
-	return nil
+	local y,x,= dimensions[1], dimensions[2]
+	local path="r"
+	if ( not y or not x) then
+		print("two dimensions required")
+		return nil
+	end
+	print(y.."h x "..x.."w rectangle")
+	
+	
+	local i,j,dvert,dhorz,count = 0,1,1,1,0
+	if (y<0) then
+		dvert=-1
+	end
+	if(x<0) then
+		path="l"
+		x=math.abs(x)
+	end
+	
+	local function moveY()
+		return nav.moveDir(vector.new(0, dvert, 0 )
+	end
+	local function moveX()
+		local ok = true
+		route.go(path)
+		ok = turtle.forward()
+		nav.faceBearing(start_bearing)
+		return ok
+	end
+	local function iter_y()
+		term.write("y:")
+		term.write(" "..i..","..j.."(".. dvert ..")")
+		if (count==0) then
+			count=count+1
+			f()
+			return true
+		end
+	
+		
+		i = i + dvert
+		if(math.abs(i)>math.abs(y) or i<0) then
+			-- out of bounds: don't go there
+			term.write(" y:out of bounds")
+			i=i-dvert
+			dvert = dvert * -1
+			return nil
+		end
+		if( moveY() ) then
+			f()		
+			return true
+		end
+		return nil
+	end
+	local function iter_x()
+		term.write("x:")
+		j = j + 1
+		term.write(" "..i..","..j.."("..dj..")"..x_bearing)
+		if (math.abs(j) > math.abs(x) ) then
+			term.write(" out of bounds")
+			return nil
+		end
+		
+		if(moveX()) then
+			f()
+			return true
+		end
+		return nil
+	end
+	return function()
+		if ( (iter_y() or iter_x()) ) then
+			return true
+		else
+			return nil
+		end
+	end
 end
 local function paver(dir,interval)
 	local slot=1
 	local place = "placeDown"
 	if (dir=="u") then place="placeUp" end
+	if (dir=="f") then place="place" end
 	
 	function checkInterval()
 		if(interval==nil) then return true end
@@ -138,7 +212,8 @@ local function paver(dir,interval)
 end
 
 shapes={
-	rectangle=rect_iter
+	rectangle=rect_iter,
+	wall=wall_iter
 }
 function go(shape,dimensions,f)
 	if(going) then
