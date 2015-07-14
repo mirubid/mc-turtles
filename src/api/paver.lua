@@ -242,3 +242,6 @@ end
 function clear(shape,dimensions)
 	go(shape, dimensions, function() turtle.digDown() end ) 
 end
+function wall(shape,dimensions)
+	go("wall",dimensions,paver("f"))
+end
