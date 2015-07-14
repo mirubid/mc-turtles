@@ -96,7 +96,7 @@ local function rect_iter(dimensions,f)
 end
 
 local function wall_iter(dimensions,f)
-	local y,x,= dimensions[1], dimensions[2]
+	local y,x= dimensions[1], dimensions[2]
 	local path="r"
 	if ( not y or not x) then
 		print("two dimensions required")
