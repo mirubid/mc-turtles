@@ -1,6 +1,10 @@
-l
-ocal host="http://mirubid.github.io/mc-turtles/"
-print("loading from " .. host .. "...")
-local manifest = http.get(host .. "manifest.txt")
-print(manifest.readAll())
-print("done")
+<body>
+l<h3>install mc-turtles</h3>
+ua:
+<pre>
+mct=http.get("http://mirubid.github.io/mc-turtles/install.lua")
+f=fs.open("mc-turtles","w")
+f.write(mct.readAll())
+f.close()
+</pre>
+</body>
