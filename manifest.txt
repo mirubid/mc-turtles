@@ -2,3 +2,17 @@ api/deque.lua
 api/paver.lua
 api/route.lua
 api/veinminer.lua
+build.lua
+calibrate.lua
+ceil.lua
+clearSpace.lua
+events.lua
+go.lua
+inventory.lua
+mine.lua
+nav.lua
+pave.lua
+startup.lua
+trees.lua
+util.lua
+zero.lua
