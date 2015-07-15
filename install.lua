@@ -1,4 +1,8 @@
+local targs = { ... }
 local host="http://mirubid.github.io/mc-turtles/"
+if(#targs > 0)
+	host = targs[1]
+end
 print("loading from " .. host .. "...")
 local manifest = http.get(host .. "manifest.txt")
 

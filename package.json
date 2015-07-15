@@ -1,0 +1,29 @@
+{
+  "name": "mc-turtles",
+  "version": "0.0.0",
+  "description": "mine craft turtles",
+  "main": "node_modules/node-http-server/server/http.js",
+  "dependencies": {
+    "node-http-server": "^3.0.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo test",
+	"start":"node node_modules/node-http-server/server/http.js launch=now"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mirubid/mc-turtles.git"
+  },
+  "keywords": [
+    "minecraft",
+    "turtles",
+    "computercraft"
+  ],
+  "author": "david milby",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mirubid/mc-turtles/issues"
+  },
+  "homepage": "https://github.com/mirubid/mc-turtles"
+}
