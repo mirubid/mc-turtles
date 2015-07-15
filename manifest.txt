@@ -16,3 +16,4 @@ startup.lua
 trees.lua
 util.lua
 zero.lua
+wall.lua
