@@ -115,7 +115,7 @@ local function wall_iter(dimensions,f)
 	end
 	
 	local function moveY()
-		return nav.moveDir(vector.new(0, dvert, 0 )
+		return nav.moveDir(vector.new(0, dvert, 0 ))
 	end
 	local function moveX()
 		local ok = true
