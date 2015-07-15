@@ -5,6 +5,11 @@ if(#targs > 0) then
 end
 print("loading from " .. host .. "...")
 local manifest = http.get(host .. "manifest.txt")
+if(manifest==nil) then
+	print("could not load " .. host .. "manifest.txt")
+	return
+end
+print("status " .. manifest.getResponseCode())
 
 if (not fs.exists("/api")) then
 	fs.makeDir("/api")
@@ -12,8 +17,10 @@ end
 local function dl(fn)
 	local src = http.get(host .."src/" .. fn)
 	local lfn = string.gsub(fn,"\.lua$","")
+	print('status ' .. src.getResponseCode())
+	local content = src.readAll()
 	local f = fs.open(lfn,"w")
-	f.write(src.readAll())
+	f.write(content)
 	f.close()
 end
 
@@ -23,5 +30,6 @@ while(fn) do
 	dl(fn)
 	fn = manifest.readLine()
 end
-print(manifest.readAll())
+manifest.close()
 print("done")
+os.reboot()

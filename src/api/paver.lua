@@ -105,7 +105,7 @@ local function wall_iter(dimensions,f)
 	print(y.."h x "..x.."w rectangle")
 	
 	
-	local i,j,dvert,dhorz,count = 0,1,1,1,0
+	local i,j,dvert,count = 0,0,1,0
 	if (y<0) then
 		dvert=-1
 	end
@@ -121,12 +121,12 @@ local function wall_iter(dimensions,f)
 		local ok = true
 		route.go(path)
 		ok = turtle.forward()
-		nav.faceBearing(start_bearing)
+		nav.faceBearing(start_bearing)		
 		return ok
 	end
 	local function iter_y()
-		term.write("y:")
-		term.write(" "..i..","..j.."(".. dvert ..")")
+		--term.write("vert:")
+		
 		if (count==0) then
 			count=count+1
 			f()
@@ -135,9 +135,10 @@ local function wall_iter(dimensions,f)
 	
 		
 		i = i + dvert
-		if(math.abs(i)>math.abs(y) or i<0) then
+		--term.write(" "..i..","..j.."(".. dvert ..")")
+		if(math.abs(i)>=math.abs(y) or i<0) then
 			-- out of bounds: don't go there
-			term.write(" y:out of bounds")
+			print(" y:out of bounds")
 			i=i-dvert
 			dvert = dvert * -1
 			return nil
@@ -148,12 +149,13 @@ local function wall_iter(dimensions,f)
 		end
 		return nil
 	end
+	
 	local function iter_x()
-		term.write("x:")
+		
 		j = j + 1
-		term.write(" "..i..","..j.."("..dj..")"..x_bearing)
-		if (math.abs(j) > math.abs(x) ) then
-			term.write(" out of bounds")
+		--term.write("horz "..i..","..j.."("..x..")")
+		if ( j > x ) then
+			--print(" out of bounds " .. j .. ">" .. x)
 			return nil
 		end
 		
@@ -161,6 +163,7 @@ local function wall_iter(dimensions,f)
 			f()
 			return true
 		end
+		print("movement failed")
 		return nil
 	end
 	return function()
@@ -242,6 +245,6 @@ end
 function clear(shape,dimensions)
 	go(shape, dimensions, function() turtle.digDown() end ) 
 end
-function wall(shape,dimensions)
+function wall(dimensions)
 	go("wall",dimensions,paver("f"))
 end

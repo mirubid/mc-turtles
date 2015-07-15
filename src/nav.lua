@@ -77,14 +77,14 @@ ud.go=function(dir)
 	end
 	return false
 end
-t.forward = function () fb.go(F)	end
+t.forward = function () return fb.go(F)	end
 t.f=t.forward
-t.back = function() fb.go(B) end
+t.back = function() return fb.go(B) end
 t.b=t.back
 
-t.turnRight = function() turn.go(R) end
+t.turnRight = function() return turn.go(R) end
 t.r=t.turnRight
-t.turnLeft = function() turn.go(L) end
+t.turnLeft = function() return turn.go(L) end
 t.l=t.turnLeft
 
 t.up = function() ud.go(U) end

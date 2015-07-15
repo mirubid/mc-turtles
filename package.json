@@ -9,7 +9,7 @@
   "devDependencies": {},
   "scripts": {
     "test": "echo test",
-	"start":"node node_modules/node-http-server/server/http.js launch=now"
+	"start":"node node_modules/node-http-server/server/http.js launch=now port=80"
   },
   "repository": {
     "type": "git",
