@@ -1,6 +1,6 @@
 local targs = { ... }
 local host="http://mirubid.github.io/mc-turtles/"
-if(#targs > 0)
+if(#targs > 0) then
 	host = targs[1]
 end
 print("loading from " .. host .. "...")
